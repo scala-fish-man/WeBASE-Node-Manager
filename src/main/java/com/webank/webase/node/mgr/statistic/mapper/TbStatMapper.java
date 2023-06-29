@@ -24,10 +24,9 @@ public interface TbStatMapper {
      * Delete block height.
      */
     @Delete({
-        "delete tb from tb_stat as tb,",
-        "(SELECT max(block_number) maxBlock FROM tb_stat where group_id = #{groupId}) AS tmp",
+        "delete from tb_stat as tb ",
         "where tb.group_id = #{groupId}",
-        " and tb.block_number <= tmp.maxBlock - ${blockRetainMax}"})
+        " and tb.block_number <= (SELECT max(block_number) maxBlock FROM tb_stat where group_id = #{groupId}) - ${blockRetainMax}"})
     Integer remove(@Param("groupId") String groupId, @Param("blockRetainMax") BigInteger blockRetainMax);
 
     @Select({"select ", TbStatSqlProvider.ALL_COLUMN_FIELDS,
